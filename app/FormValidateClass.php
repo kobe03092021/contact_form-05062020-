@@ -1,10 +1,15 @@
 <?php
+
 // 定数クラスを読み込み
 require_once(__DIR__.'/ConstantClass.php');
 
-// バリデーション用クラス
-class Validate {
-  private $posted = [];
+  /*
+  [クラス説明]
+  用途：バリデーション処理
+  備考：エスケープ処理を含む
+  */
+class FormValidate {
+  protected $posted = [];
 
   /*
   [メソッド説明]
@@ -23,9 +28,9 @@ class Validate {
   返り値：postされた値 (string型)
   備考：項目全体をキーで取得し、エスケープした値を出力
   */
-  public function purify (string $key) :? string {
+  public function escape (string $key) :? string {
       return !empty($this->posted[$key]) ? htmlspecialchars($this->posted[$key],ENT_QUOTES,'UTF-8') : null;
-    }
+  }
 
   /*
   [メソッド説明]
@@ -45,9 +50,9 @@ class Validate {
   パラメータ：なし
   返り値：$errors (配列)
   返り値の配列構造：$errors['is_empty']、$errors['pregmatch']、$errors['eqaulity']
-  備考：①空判定 ②入力値の判定 ③値の同一性 を判定し、結果を配列に出力
+  備考：①空判定 ②入力値の判定 ③値の同一性 を判定し、結果を配列に出力。戻り値を１つにまとめたい都合上、このメソッドで一括して処理。
   */
-  public function errors () :? array {
+  public function formErrors() :? array {
 
     // 各エラー文言の格納用
     $errors['is_empty'] = [];
@@ -176,26 +181,5 @@ class Validate {
       "cf_mail",
     ];
   }
-}
 
-
-// ページアクセスの処理用クラス
-class PageAccess {
-  private $refferer;
-
-  /*
-  [メソッド説明]
-  用途：URLの直叩き防止
-  パラメータ：なし
-  返り値：$return (string型)
-  備考：入力画面を経ずにURLへ直アクセスした場合、強制的に入力画面へリダイレクト
-  */
-  public function redirect() : string {
-    $return = "";
-    if ( $_SERVER['REQUEST_METHOD'] !== 'POST') {
-    $return .= header("location:input.php");
-    $return .= exit;
-    }
-    return $return;
-  }
 }
