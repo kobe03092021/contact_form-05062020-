@@ -1,14 +1,17 @@
 <?php
-// バリデーション用クラス読み込み
-require_once(__DIR__.'/app/ValidateClass.php');
+// ページへのアクセスの処理用クラス
+require_once(__DIR__.'/app/RedirectClass.php');
+// バリデーション用クラス
+require_once(__DIR__.'/app/FormValidateClass.php');
+
 // リダイレクト処理
-$page = new PageAccess();
+$page = new Redirect();
 // ページアクセスの直打ち防止
-$page->redirect();
+$page->redirectToInput();
 // POSTされた値の格納
 $posted = $_POST;
 // バリデーション用クラスのインスタンス化
-$validate = new Validate($posted);
+$validate = new FormValidate($posted);
 ?>
 
 <!doctype html>
@@ -16,7 +19,7 @@ $validate = new Validate($posted);
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<link rel="stylesheet" href="Ctrl/caution.css">
+		<link rel="stylesheet" href="css/caution.css">
 		<title>お問い合わせ（確認画面）</title>
 	</head>
 	<body>
@@ -27,83 +30,83 @@ $validate = new Validate($posted);
 <!--氏名-->
 			<div>
 				<label>■ 氏名</label><br>
-				<?= $validate->purify('last'); ?> <?= $validate->purify('first'); ?>
+				<?= $validate->escape('last'); ?> <?= $validate->escape('first'); ?>
 				</div>
 			</div>
 
 <!--フリガナ-->
 			<div>
 				<label>■ フリガナ</label><br>
-				<?= $validate->purify('last_kana'); ?> <?= $validate->purify('first_kana'); ?>
+				<?= $validate->escape('last_kana'); ?> <?= $validate->escape('first_kana'); ?>
 				</div>
 			</div>
 
 <!--性別-->
 			<div>
 				<label>■ 性別</label><br>
-				<?= $validate->purify('sex'); ?>
+				<?= $validate->escape('sex'); ?>
 			</div>
 
 <!--郵便番号-->
 			<div>
 				<label>■ 郵便番号</label><br>
-				<?= $validate->purify('zip'); ?>
+				<?= $validate->escape('zip'); ?>
 			</div>
 
 <!--都道府県-->
 			<div>
 				<label>■ 都道府県</label><br>
-				<?= $validate->purify('pref'); ?>
+				<?= $validate->escape('pref'); ?>
 				</div>
 			</div>
 
 <!--市区町村-->
 			<div>
 				<label>■ 市区町村</label><br>
-				<?= $validate->purify('city'); ?>
+				<?= $validate->escape('city'); ?>
 			</div>
 
 <!--番地-->
 			<div>
 				<label>■ 番地</label><br>
-				<?= $validate->purify('street'); ?>
+				<?= $validate->escape('street'); ?>
 				</div>
 			</div>
 
 <!--建物名（任意）-->
 			<div>
 				<label>■ 建物名 (任意)</label><br>
-				<?= $validate->purify('building') ?>
+				<?= $validate->escape('building') ?>
 			</div>
 
 <!--電話番号-->
 			<div>
 				<label>■ 電話番号</label><br>
-				<?= $validate->purify('phone'); ?>
+				<?= $validate->escape('phone'); ?>
 			</div>
 
 <!--メールアドレス-->
 			<div>
 				<label>■ メールアドレス</label><br>
-				<?= $validate->purify('mail'); ?>
+				<?= $validate->escape('mail'); ?>
 			</div>
 
 <!--確認用メールアドレス-->
 			<div>
 				<label>■ 確認用メールアドレス</label><br>
-				<?= $validate->purify('cf_mail'); ?>
+				<?= $validate->escape('cf_mail'); ?>
 			</div>
 
 <!--ご相談種別-->
 			<div>
 				<label>■ ご相談種別</label><br>
-				<?= $validate->purify('consultation_type'); ?>
+				<?= $validate->escape('consultation_type'); ?>
 			</div>
 
 <!--お問い合わせ内容-->
 			<div>
 				<label>■ お問い合わせ内容</label><br>
-				<?= $validate->purify('dtl'); ?>
+				<?= $validate->escape('dtl'); ?>
 			</div>
 
 			<?php foreach ($posted as $key => $val) :?>
