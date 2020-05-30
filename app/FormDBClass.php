@@ -7,7 +7,7 @@ require_once(__DIR__.'/ConstantClass.php');
 --------------------------------------------------------------------------
 クラス説明
 --------------------------------------------------------------------------
-用途：データベース操作
+用途：データベース操作（問い合わせフォームが関連）
 備考：各SQL文をセットで用意
 */
 class FormDBConnect {
@@ -31,13 +31,12 @@ class FormDBConnect {
   }
 
 /*
-メソッド説明
 用途：フォーム送信結果をテーブルに追記(thanks.php)
 パラメータ：なし
 リターン：$stmt
 備考：
 */
-  public function formInsert(array $posted) :object {
+  public function formInsert(array $posted) : object {
     try {
       // 配列内の各キー名を変数名として抽出
       extract($posted, EXTR_REFS);
@@ -72,26 +71,22 @@ class FormDBConnect {
   }
 
 /*
-メソッド説明
-用途：テーブル情報を全件取得
+
+用途：問い合わせ一覧取得 (管理画面)
 パラメータ：なし
 リターン：$row
-SQL："SELECT * FROM test"
-備考：現状、未使用
+備考：
 */
-  public function formSelect() :string {
+  public function allForm() : array {
     try {
       // SQL文の作成
       $select = ("SELECT * FROM test");
       // 変数をqueryにセットしてSQLを実行
       foreach($this->dbh->query($select) as $row) {
-        echo '<table>';
-        echo '<tr>'
+        echo '<table border = "0"">' .'<tr>'
           .'<th>ID</th>'
-          .'<th>性</th>'
-          .'<th>名</th>'
-          .'<th>セイ</th>'
-          .'<th>メイ</th>'
+          .'<th>性</th>' .'<th>名</th>'
+          .'<th>セイ</th>' .'<th>メイ</th>'
           .'<th>性別</th>'
           .'<th>郵便番号</th>'
           .'<th>都道府県</th>'
@@ -101,24 +96,21 @@ SQL："SELECT * FROM test"
           .'<th>メールアドレス</th>'
           .'<th>ご相談種別</th>'
           .'<th>お問い合わせ内容</th>'
-          . '</tr>';
-        echo '<th>'. '<tr>'
-          . '<td>', $row['id']
-          . '<td>', $row['last']
-          . '<td>', $row['first']
-          . '<td>', $row['last_kana']
-          . '<td>', $row['first_kana']
-          . '<td>', $row['sex']
-          . '<td>', $row['zip']
-          . '<td>', $row['pref']
-          . '<td>', $row['city']
-          . '<td>', $row['street']
-          . '<td>', $row['building']
-          . '<td>', $row['phone']
-          . '<td>', $row['mail']
-          . '<td>', $row['consultation_type']
-          . '<td>', $row['detail'];
-        echo '</tr>'. "</table>". "</br>";
+          . '</tr>' .'<th>' . '<tr>'
+          . '<td>', htmlspecialchars($row['id'])
+          . '<td>', htmlspecialchars($row['last']) . '<td>', htmlspecialchars($row['first'])
+          . '<td>', htmlspecialchars($row['last_kana']) . '<td>', htmlspecialchars($row['first_kana'])
+          . '<td>', htmlspecialchars($row['sex'])
+          . '<td>', htmlspecialchars($row['zip'])
+          . '<td>', htmlspecialchars($row['pref'])
+          . '<td>', htmlspecialchars($row['city'])
+          . '<td>', htmlspecialchars($row['street'])
+          . '<td>', htmlspecialchars($row['building'])
+          . '<td>', htmlspecialchars($row['phone'])
+          . '<td>', htmlspecialchars($row['mail'])
+          . '<td>', htmlspecialchars($row['consultation_type'])
+          . '<td>', htmlspecialchars($row['detail'])
+          .'</tr>'. "</table>". "</br>";
       }
     }
     catch(Exception $e)
@@ -129,45 +121,108 @@ SQL："SELECT * FROM test"
     return $row;
   }
 
-/*
-メソッド説明
-用途：新規テーブル作成
-パラメータ：なし
-リターン：$stmt
-SQL："SELECT * FROM test"
-備考：現状、未使用
-*/
-  public function formTableCreate() :object {
+  /*
+  用途：問い合わせ一覧を項目検索 (管理画面)
+  パラメータ：$posted
+  リターン：$row
+  備考：結果が一致しない場合、エラー文言（strict型）を吐くため、タイプヒンティングなし
+  */
+  public function searchForm(array $posted)  {
     try {
+      $row = "";
+      // 配列内の各キー名を変数名として抽出
+      extract($posted, EXTR_REFS);
       // SQL文の作成
-      $sql = "CREATE TABLE test2 (
-        id INT( 11 ) AUTO_INCREMENT PRIMARY KEY,
-        last VARCHAR( 25 ) NOT NULL, 
-        first VARCHAR( 25 ) NOT NULL,
-        last_kana VARCHAR( 25 ) NOT NULL,
-        first_kana VARCHAR( 25 ) NOT NULL,
-        sex VARCHAR( 5 ) NOT NULL, 
-        zip INT( 7 ) NOT NULL, 
-        pref VARCHAR( 10 ) NOT NULL, 
-        city VARCHAR( 150 ) NOT NULL, 
-        street VARCHAR( 100 ) NOT NULL,
-        building VARCHAR( 50 ) NOT NULL,
-        phone INT( 11 ) NOT NULL,
-        mail VARCHAR( 50 ) NOT NULL,
-        consultation_type VARCHAR( 50 ) NOT NULL,
-        detail VARCHAR( 250 ) NOT NULL
-        )";
-      // SQL文のオブジェクトを取得
+      $sql =  ( "SELECT * FROM test WHERE id = '$id' OR last_kana = '$last_kana' AND first_kana = '$first_kana' OR phone = '$phone' OR mail = '$mail' " );
+      // SQL文を格納（パラメータにユーザ名のPOSTデータ）
       $stmt = $this->dbh->prepare($sql);
-      // 挿入する値が入った変数をexecuteにセットしてSQLを実行
+      // // // 値をバインド
+      $stmt -> bindParam(':id', $id ,PDO::PARAM_STR);
+      $stmt -> bindParam(':last_kana', $last_kana ,PDO::PARAM_STR);
+      $stmt -> bindParam(':first_kana', $first_kana, PDO::PARAM_STR);
+      $stmt -> bindParam(':phone', $phone, PDO::PARAM_STR);
+      $stmt -> bindParam(':mail', $mail, PDO::PARAM_STR);
+      // 実行文の用意
       $stmt->execute();
+      // フェッチで該当するデータを全件取得(連想配列をキー名で取得)
+      $rows = $stmt->fetchall(PDO::FETCH_ASSOC);
+      foreach($rows as $row) {
+            echo '<table border="1">' .'<tr>'
+            .'<th>ID</th>'
+            .'<th>性</th>' .'<th>名</th>'
+            .'<th>セイ</th>' .'<th>メイ</th>'
+            .'<th>性別</th>'
+            .'<th>郵便番号</th>'
+            .'<th>都道府県</th>'
+            .'<th>市区町村</th>'
+            .'<th>番地</th>'
+            .'<th>電話番号</th>'
+            .'<th>メールアドレス</th>'
+            .'<th>ご相談種別</th>'
+            .'<th>お問い合わせ内容</th>'
+            . '</tr>' .'<th>' . '<tr>'
+            . '<td>', htmlspecialchars($row['id'])
+            . '<td>', htmlspecialchars($row['last']) . '<td>', htmlspecialchars($row['first'])
+            . '<td>', htmlspecialchars($row['last_kana']) . '<td>', htmlspecialchars($row['first_kana'])
+            . '<td>', htmlspecialchars($row['sex'])
+            . '<td>', htmlspecialchars($row['zip'])
+            . '<td>', htmlspecialchars($row['pref'])
+            . '<td>', htmlspecialchars($row['city'])
+            . '<td>', htmlspecialchars($row['street'])
+            . '<td>', htmlspecialchars($row['building'])
+            . '<td>', htmlspecialchars($row['phone'])
+            . '<td>', htmlspecialchars($row['mail'])
+            . '<td>', htmlspecialchars($row['consultation_type'])
+            . '<td>', htmlspecialchars($row['detail'])
+            .'</tr>'. "</table>". "</br>";
+      }
     }
     catch(Exception $e)
     {
-      echo '[Failed] formTableCreate()' .'「管理者に問い合わせください」' .'<br>';
+      echo '[Failed] login(array $posted)' .'「管理者に問い合わせください」' .'<br>';
       exit;
     }
-    return $stmt;
+    return $row;
   }
+
+
+/*
+用途：新規テーブル作成
+パラメータ：なし
+リターン：$stmt
+備考：現状、未使用
+*/
+  // public function formTableCreate() :object {
+  //   try {
+  //     // SQL文の作成
+  //     $sql = "CREATE TABLE test2 (
+  //       id INT( 11 ) AUTO_INCREMENT PRIMARY KEY,
+  //       last VARCHAR( 25 ) NOT NULL, 
+  //       first VARCHAR( 25 ) NOT NULL,
+  //       last_kana VARCHAR( 25 ) NOT NULL,
+  //       first_kana VARCHAR( 25 ) NOT NULL,
+  //       sex VARCHAR( 5 ) NOT NULL, 
+  //       zip INT( 7 ) NOT NULL, 
+  //       pref VARCHAR( 10 ) NOT NULL, 
+  //       city VARCHAR( 150 ) NOT NULL, 
+  //       street VARCHAR( 100 ) NOT NULL,
+  //       building VARCHAR( 50 ) NOT NULL,
+  //       phone INT( 11 ) NOT NULL,
+  //       mail VARCHAR( 50 ) NOT NULL,
+  //       consultation_type VARCHAR( 50 ) NOT NULL,
+  //       detail VARCHAR( 250 ) NOT NULL
+  //       )";
+  //     // SQL文のオブジェクトを取得
+  //     $stmt = $this->dbh->prepare($sql);
+  //     // 挿入する値が入った変数をexecuteにセットしてSQLを実行
+  //     $stmt->execute();
+  //   }
+  //   catch(Exception $e)
+  //   {
+  //     echo '[Failed] formTableCreate()' .'「管理者に問い合わせください」' .'<br>';
+  //     exit;
+  //   }
+  //   return $stmt;
+  // }
   
 }

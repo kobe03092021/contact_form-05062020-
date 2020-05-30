@@ -3,16 +3,17 @@
 // 定数クラスを読み込み
 require_once(__DIR__.'/ConstantClass.php');
 
-  /*
-  [クラス説明]
-  用途：バリデーション処理
-  備考：エスケープ処理を含む
-  */
+/*
+--------------------------------------------------------------------------
+クラス説明
+-------------------------------------------------------------------------- 
+用途：バリデーション処理
+備考：エスケープ処理を含む
+*/
 class FormValidate {
   protected $posted = [];
 
   /*
-  [メソッド説明]
   パラメータ：postされた値 (配列)
   初期化後：postされた値 (オブジェクト型)
   備考：$postedの中身は項目の入力画面にて$_POSTより取得
@@ -22,10 +23,9 @@ class FormValidate {
     }
 
   /*
-  [メソッド説明]
   用途：値のエスケープ処理
-  パラメータ：nameタグ (string型)
-  返り値：postされた値 (string型)
+  パラメータ：$key
+  返り値：$post[$key]
   備考：項目全体をキーで取得し、エスケープした値を出力
   */
   public function escape (string $key) :? string {
@@ -33,8 +33,7 @@ class FormValidate {
   }
 
   /*
-  [メソッド説明]
-  用途；checkedをつける
+  用途；"checked"をつける
   パラメータ：nameタグ (string型)
   返り値：postされた値 (string型)
   備考：foreachを使用しない場合に、POST値を判別し、checkedをつける(入力された値を記憶させる)
@@ -45,17 +44,16 @@ class FormValidate {
 
 
   /*
-  [メソッド説明]
-  用途：基本のバリデーション処理
+  用途：問い合わせフォームのバリデーション処理
   パラメータ：なし
   返り値：$errors (配列)
-  返り値の配列構造：$errors['is_empty']、$errors['pregmatch']、$errors['eqaulity']
+  返り値の配列構造：$errors['empty']、$errors['pregmatch']、$errors['eqaulity']
   備考：①空判定 ②入力値の判定 ③値の同一性 を判定し、結果を配列に出力。戻り値を１つにまとめたい都合上、このメソッドで一括して処理。
   */
   public function formErrors() :? array {
 
     // 各エラー文言の格納用
-    $errors['is_empty'] = [];
+    $errors['empty'] = [];
     $errors['pregmatch'] = [];
     $errors['eqaulity'] =[];
 
@@ -80,7 +78,7 @@ class FormValidate {
   // 値の空判定
     if(isset($_POST['submit'])) :
       foreach($this->fieldItemEmpty() as $key) :
-        empty($this->posted[$key]) ? $errors['is_empty'][$key] = Constant::REQUIRED[$key]."は必須入力です"."<br>" : null;
+        empty($this->posted[$key]) ? $errors['empty'][$key] = Constant::REQUIRED[$key]."は必須入力です"."<br>" : null;
       endforeach;
     endif;
 
@@ -102,28 +100,28 @@ class FormValidate {
   }
 
   /*
-  [メソッド説明]
   用途：POSTデータから必須項目のみを取得
   パラメータ：なし
   返り値：必須項目のnameタグ (配列)
   備考：現在は未使用
   */
-  public function mandatoryField() : array {
-    $field_items = $this->fieldItemEmpty();
-    $mandatory_field = [];
+  // public function mandatoryField() : array {
+  //   $field_items = $this->fieldItemEmpty();
+  //   $mandatory_field = [];
 
-    foreach($this->posted as $key => $val) {
-      if(in_array($key, $field_items)) {
-        $mandatory_field += [$key => $val]; 
-      }
-    }
-    return $mandatory_field;
-  }
+  //   foreach($this->posted as $key => $val) {
+  //     if(in_array($key, $field_items)) {
+  //       $mandatory_field += [$key => $val]; 
+  //     }
+  //   }
+  //   return $mandatory_field;
+  // }
 
-  // 【項目追加時は必要に応じて、以下メソッドの返り値にnameタグを追記すること。】 //
+  /* 
+  【項目追加時は必要に応じて、以下メソッドを追記すること。】
+  */
 
   /*
-  [メソッド説明]
   用途：「値の空判定」で使用する項目
   パラメータ：なし
   返り値：項目のnameタグ (配列)
@@ -150,7 +148,6 @@ class FormValidate {
   }
 
   /*
-  [メソッド説明]
   用途：「入力制限の判定」で使用する項目
   パラメータ：なし
   返り値：項目のnameタグ (配列)
@@ -169,7 +166,6 @@ class FormValidate {
   }
 
   /*
-  [メソッド説明]
   用途：「値の同一チェック」で使用する項目
   パラメータ：なし
   返り値：項目のnameタグ (配列)

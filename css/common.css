@@ -1,0 +1,52 @@
+/* 必須項目 */
+span.require {
+  color: rgb(255, 0, 0);
+  font-size: 10px;
+  margin-left : 10px;
+  letter-spacing: 1px;
+  }
+
+/* 任意項目 */
+span.optional {
+  font-size: 10px;
+  margin-left : 10px;
+  letter-spacing: 1px;
+  }
+
+/* エラー文言 */
+div.caution {
+  color: rgb(255, 0, 0);
+  font-size: 15px;
+}
+
+/* 入力欄が上下で被らないように調整 */
+div.input_box{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+form {
+  width: 50%;
+  min-width: 9rem;
+}
+
+body {
+  padding:2rem;
+  background-color: #ffff;
+}
+
+input, select, radio {
+  align-items:center;
+}
+
+p {
+  font-size: 14px;
+}
+
+label {
+  font-size: 12px;
+}
+
+th, td {
+  font-size: 14px;
+}
