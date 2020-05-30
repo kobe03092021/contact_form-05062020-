@@ -48,7 +48,7 @@ class SendMailClass {
   }
 
   /*
-  [メソッド説明]
+  []
   用途：送信処理
   パラメータ：
   返り値：$mail_form (string型)
@@ -67,7 +67,7 @@ class SendMailClass {
     }
 
   /*
-  [メソッド説明]
+  []
   用途：送信処理
   パラメータ：
   返り値：$mail_form (string型)
@@ -86,7 +86,7 @@ class SendMailClass {
     }
 
   /*
-  [メソッド説明]
+  []
   用途：メール本文（共通）
   パラメータ：
   返り値：$body (string型)
@@ -114,7 +114,7 @@ class SendMailClass {
   }
 
   /*
-  [メソッド説明]
+  []
   用途：ユーザ向け本文
   パラメータ：
   返り値：$body (string型)
@@ -152,7 +152,7 @@ class SendMailClass {
   }
 
   /*
-  [メソッド説明]
+  []
   用途：管理者向け本文
   パラメータ：
   返り値：$body (string型)
@@ -184,7 +184,7 @@ class SendMailClass {
   }
 
   /*
-  [メソッド説明]
+  []
   用途：オプション値の追加
   パラメータ：
   返り値：$option (string型)
@@ -203,7 +203,7 @@ class SendMailClass {
   }
 
   /*
-  [メソッド説明]
+  []
   用途：オプション値の追加
   パラメータ：
   返り値：$option (string型)
