@@ -12,37 +12,44 @@ PHP及びHTMLでの問合せフォーム構築～管理画面
 PHP Version 7.1 以上
 #### ファイル構成
 contact配下
-- 問い合わせフォーム
+- 問い合わせフォーム (form)
         - input.php
         - confirm.php
         - thanks.php
-- 処理側
-        - app/ DBClass.php
-        - app/ SendMailClass.php
-        - app/ ValidateClass.php (バリデーション)
-        - app/ ConstantClass.php (定数)
-- 管理画面
+- 処理側 (app)
+        - FormDBClass.php
+        - FormValidateClass.php (バリデーション)
+        - UserDBClass.php
+        - UserValidateClass.php (バリデーション)
+        - SendMailClass.php
+        - ConstantClass.php (定数)
+- 管理画面 (manage)
         - login.php
         - console.php
         - check.php
         - complete.php
-     新規ユーザ登録画面
-        - registration.php
+- 新規ユーザ登録画面 (registration)
+        - input.php
         - confirm.php
         - upload.php
-        - complete.php
-- CSS
+- CSS (css)
         - css/ common.css
-- パスワードファイル
+- 設定ファイル (settings)
         - admin_account.php
-- ポートフォリオ概要
+- 概要説明
         - readme.md
 #### データベース構造
-データベース
-|_ contact_form
-テーブル
-|_ admin_test (管理画面ユーザ用)
-|_ test (問い合わせ結果)
+###### データベース (1)
+contact_form
+###### テーブル (2)
+admin_test (管理画面ユーザ用)
+| id | user_name | user_password |
+| :--- | :---: | ---: |
+|  | admin | password |
+
+test (問い合わせ結果)
+| id | last | first | last_kana | first_kana | sex | zip | pref | city | street | building | phone | mail | consultation_type | detail |
+| :--- | :---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 
 
 #### 共通のバリデーション処理
