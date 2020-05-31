@@ -45,7 +45,6 @@ contact_form
 admin_test (管理画面ユーザ用)
 | id | user_name | user_password |
 | :--- | :---: | ---: |
-|  | admin | password |
 
 test (問い合わせ結果)
 | id | last | first | last_kana | first_kana | sex | zip | pref | city | street | building | phone | mail | consultation_type | detail |
