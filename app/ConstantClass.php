@@ -9,12 +9,12 @@ class Constant
 {
     // 管理者向けメール
     const ADDRESS_FOR_ADMIN     = [
-        "test" => 'fflzu19752@yahoo.co.jp'
+        "test" => ''
     ];
 
     // ユーザ向けメール
     const ADDRESS_FOR_USER     = [
-        "test" => 'fflzu19752@yahoo.co.jp'
+        "test" => ''
     ];
     // 管理者向けメール件名
     const TITLE_FOR_ADMIN     = [
